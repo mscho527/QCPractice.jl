@@ -1,28 +1,22 @@
-"""
-QCPractice.IO
-
-Submodule to manage IO operations and bindings to other packages
-
-# Functions
-    QCPractice.IO.read
-
-# Note
-PyCall should be rebuilt with Conda activated if `pyscf` was installed within a Conda environment.
-Ideally, submodules for each package should be separate (to simplify the dependencies)
-"""
+using GaussianBasis # Julia bindings to libcint
+include("Molecule.jl")
 
 #using PyCall # Allows calls to Python (for pyscf bindings)
 #@pyimport pyscf
 
-using GaussianBasis # Julia bindings to libcint
-using .Molecule: Molecule
+#= QCPractice.Inputs
 
+Submodule to manage IO operations and bindings to other packages
 
-"""
-GaussianBasis.jl Wrappers
-    Functions below simply provide simple interface to GaussianBasis.jl
-    (Julia libcint bindings)
-"""
+# Note
+PyCall should be rebuilt with Conda activated if `pyscf` was installed within a Conda environment.
+Ideally, submodules for each package should be separate (to simplify the dependencies)
+=#
+
+### GaussianBasis.jl Wrappers
+### Functions below simply provide interface to GaussianBasis.jl
+### (Julia libcint bindings)
+
 function libcint_S(mol::Molecule) # Overlap Integrals
     bset = BasisSet(mol.basis, mol.xyzstring)
     return overlap(bset)
@@ -38,7 +32,7 @@ function libcint_V(mol::Molecule) # Nuclear Attraction Integrals
     return nuclear(bset)
 end
 
-function libcint_ijkl(mol::Molecule, sparse::Boolean=false) # (ij|kl) 4-Centered ERI
+function libcint_ijkl(mol::Molecule, sparse::Bool=false) # (ij|kl) 4-Centered ERI
     bset = BasisSet(mol.basis, mol.xyzstring)
     sparse ? (return sparseERI_2e4c(bset)) : (return ERI_2e4c(bset))
 end
