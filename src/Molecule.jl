@@ -1,5 +1,5 @@
 #= QCPractice.Molecule
-   Submodule to that contains Julia struct Molecule =#
+   Submodule that contains Julia struct Molecule =#
 
 struct Molecule
     xyzstring::String # xyz string in the format below:
