@@ -1,10 +1,11 @@
 #= QCPractice.Molecule
    Submodule that contains Julia struct Molecule =#
 
+using DelimitedFiles
 struct Molecule
     xyzstring::String # xyz string in the format below:
     # "H 0.00 0.00 0.00\nH 0.70 0.00 0.00" (unit = angstroms = 1.889 bohr)
-    basis::String # basis set
+    basis::String # basis set (if troyint, path to data file)
     nelec::Int # number of electrons
 end
 
@@ -29,3 +30,17 @@ function Molecule(xyzstring::String, basis::String, nelec::Int)
     return Molecule(xyzstring, basis, nelec)
 end
 
+function Molecule(xyzstring::String, troyint::String)
+    """
+    Constructor function
+        Reads pre-calculated integrals from the specified file
+        and initiate Molecule struct
+    """
+    input = readdlm(troyint)
+    # Line 1 // Nuc-Nuc Repulsion Energy (Hartrees; RHF.jl will read this)
+    # Line 2 // Int::nbasis, Int::nocc/2
+    # Line 3 // Vector{Float64}::S
+    # Line 4 // Vector{Float64}::h
+    # Line 5 // Vector{Float64}::ijkl
+    return Molecule(xyzstring, troyint, input[2,2]*2)
+end
