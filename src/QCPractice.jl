@@ -5,7 +5,7 @@
 
 module QCPractice
 
-export Molecule, RHF, run_rhf!, MP, run_mp2!
+export Molecule, RHF, run_rhf!, MP, run_mp2!, run_mp3!
 
 # Include submodules
 include("Inputs.jl")
